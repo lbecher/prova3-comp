@@ -1,10 +1,10 @@
 program -> cmd-seq
 cmd-seq -> cmd {’;’ cmd}
-cmd-> if-cmd | repeat-cmd | assign-cmd | read-cmd | write-cmd
-if-cmd-> IF exp THEN cmd-seq [ELSE cmd-seq] END
+cmd -> if-cmd | repeat-cmd | assign-cmd | read-cmd | write-cmd
+if-cmd -> IF exp THEN cmd-seq [ELSE cmd-seq] END
 repeat-cmd -> REPEAT cmd-seq UNTIL exp
 assign-cmd -> ID ’:=’ exp
-read-cmd-> READ ID
+read-cmd -> READ ID
 write-cmd -> WRITE exp
 exp -> simple-exp [rel-op simple-exp]
 rel-op -> ’<’ | ’=’
