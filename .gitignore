@@ -1,3 +1,4 @@
+bin
 lp.tab.h
 lp.tab.c
 lex.yy.c
