@@ -6,12 +6,13 @@
 extern FILE* yyin;
 %}
 
+ignore [" "]|["\t"]|["\n"]
 number [+-]?[0-9]+
 id [a-zA-Z][a-zA-Z0-9]*
 
 %%
 
-[ \t\n]; // ignorar caracteres desnecessários
+{ignore} {}
 
 ";" return SEMICOLON;
 ":=" return ASSIGN;
@@ -41,7 +42,6 @@ id [a-zA-Z][a-zA-Z0-9]*
     yylval = strdup(yytext);
     return ID;
 }
-
 . {
     printf("Token inválido: %s\n", yytext);
 }
