@@ -13,7 +13,7 @@ int var_count = 0;
 int label_count = 0;
 
 void gera_codigo(const char* result, const char* arg1, const char* op, const char* arg2) {
-    printf("    %s = %s %s %s\n", result, arg1, op, arg2);
+    fprintf(yyout, "    %s = %s %s %s\n", result, arg1, op, arg2);
 }
 
 char* nova_variavel() {
@@ -42,17 +42,17 @@ cmd: if_cmd | repeat_cmd | assign_cmd | read_cmd | write_cmd;
 
 if_cmd:
     IF _exp_then cmd_seq END { 
-        printf("%s:\n", $2);
+        fprintf(yyout, "%s:\n", $2);
     }
     | IF _exp_then cmd_seq _else cmd_seq END {
-        printf("%s:\n", $4);
+        fprintf(yyout, "%s:\n", $4);
     }
     ;
 
 _exp_then:
     exp THEN {
         char* label = nova_label();
-        printf("    if %s goto %s\n", $1, label);
+        fprintf(yyout, "    if %s goto %s\n", $1, label);
         $$ = label;
     }
     ;
@@ -62,8 +62,8 @@ _else:
         char* label_anterior = (char*)malloc(sizeof(char) * 10);
         sprintf(label_anterior, ".L%d", label_count);
         char* label = nova_label();
-        printf("    goto %s\n", label);
-        printf("%s:\n", label_anterior);
+        fprintf(yyout, "    goto %s\n", label);
+        fprintf(yyout, "%s:\n", label_anterior);
         $$ = label;
     }
     ;
@@ -71,35 +71,35 @@ _else:
 repeat_cmd:
     _repeat cmd_seq UNTIL exp {
         char* label = nova_label();
-        printf("    if %s goto %s\n", $4, label);
-        printf("    goto %s\n", $1);
-        printf("%s:\n", label);
+        fprintf(yyout, "    if %s goto %s\n", $4, label);
+        fprintf(yyout, "    goto %s\n", $1);
+        fprintf(yyout, "%s:\n", label);
     }
     ;
 
 _repeat:
     REPEAT {
         char* label = nova_label();
-        printf("%s:\n", label);
+        fprintf(yyout, "%s:\n", label);
         $$ = label;
     }
     ;
 
 assign_cmd:
     ID ASSIGN exp {
-        printf("    %s = %s\n", $1, $3);
+        fprintf(yyout, "    %s = %s\n", $1, $3);
     }
     ;
 
 read_cmd:
     READ ID {
-        printf("    read %s\n", $2);
+        fprintf(yyout, "    read %s\n", $2);
     }
     ;
 
 write_cmd:
     WRITE exp {
-        printf("    write %s\n", $2);
+        fprintf(yyout, "    write %s\n", $2);
     }
     ;
 
@@ -163,7 +163,7 @@ int yyerror(char const *s) {
 
 int main(int argc, char** argv) {
     if (argc != 3) {
-        printf("Uso: ./lp <arquivo_de_entrada> <arquivo_de_saida>\n");
+        fprintf(yyout, "Uso: ./lp <arquivo_de_entrada> <arquivo_de_saida>\n");
         return 1;
     }
 
@@ -171,17 +171,17 @@ int main(int argc, char** argv) {
     yyout = fopen(argv[2], "w");
 
     if (!yyin) {
-        printf("Erro ao abrir o arquivo de entrada!\n");
+        fprintf(yyout, "Erro ao abrir o arquivo de entrada!\n");
         return 1;
     }
     if (!yyout) {
-        printf("Erro ao criar o arquivo de saída!\n");
+        fprintf(yyout, "Erro ao criar o arquivo de saída!\n");
         return 1;
     }
 
-
-    yyparse();
-
+    if (yyparse()) {
+        printf("Erro próximo à linha %d!\n", yylineno);
+    }
 
     fclose(yyin);
     fclose(yyout);

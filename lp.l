@@ -3,16 +3,21 @@
 #include <stdlib.h>
 #define YYSTYPE char*
 #include "lp.tab.h"
+extern int yylineno;
 extern FILE* yyin;
 %}
 
-ignore [" "]|["\t"]|["\n"]
+ignore [ \t]
 number [+-]?[0-9]+
 id [a-zA-Z][a-zA-Z0-9]*
 
 %%
 
 {ignore} {}
+
+"\n" {
+    yylineno++;
+}
 
 ";" return SEMICOLON;
 ":=" return ASSIGN;

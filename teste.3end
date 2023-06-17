@@ -1,0 +1,13 @@
+    read x
+    _t1 = 2 + 2
+    _t2 = x >= _t1
+    if _t2 goto .L1
+.L2:
+    _t3 = x + 1
+    x = _t3
+    _t4 = x >= 4
+    if _t4 goto .L3
+    goto .L2
+.L3:
+.L1:
+    write x
