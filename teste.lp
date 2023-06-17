@@ -1,6 +1,7 @@
-if var < 0 then
-    var := var * -1
-else
-    va&r := var + x;
-    y := 5 / 5
-end
+read x;
+if x < (2 + 2) then
+    repeat
+        x := x + 1
+    until x < 4
+end;
+write x

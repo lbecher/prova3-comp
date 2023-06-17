@@ -16,14 +16,27 @@ id [a-zA-Z][a-zA-Z0-9]*
 
 ";" return SEMICOLON;
 ":=" return ASSIGN;
-"<" return LESS_THAN;
-"=" return EQUALS;
-"+" return PLUS;
-"-" return MINUS;
-"*" return MULTIPLY;
-"/" return DIVIDE;
 "(" return LPAREN;
 ")" return RPAREN;
+"<" return LESS_THAN;
+"=" return EQUALS;
+
+"+" {
+    yylval = "+";
+    return PLUS;
+};
+"-" {
+    yylval = "-";
+    return MINUS;
+};
+"*" {
+    yylval = "*";
+    return MULTIPLY;
+};
+"/" {
+    yylval = "/";
+    return DIVIDE;
+};
 
 "if" return IF;
 "then" return THEN;
